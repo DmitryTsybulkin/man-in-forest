@@ -1,0 +1,26 @@
+
+man-run.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+man-run-1
+  rotate: false
+  xy: 1, 1
+  size: 224, 224
+  orig: 224, 224
+  offset: 0, 0
+  index: -1
+man-run-2
+  rotate: false
+  xy: 227, 1
+  size: 224, 224
+  orig: 224, 224
+  offset: 0, 0
+  index: -1
+man-standing
+  rotate: false
+  xy: 453, 1
+  size: 224, 224
+  orig: 224, 224
+  offset: 0, 0
+  index: -1
