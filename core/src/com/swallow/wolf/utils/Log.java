@@ -18,8 +18,8 @@ public class Log {
         Gdx.app.log(ANSI_YELLOW + "[WARN]" + ANSI_RESET, message);
     }
 
-    public static void error(final String message, final Throwable exception) {
-        Gdx.app.error(ANSI_RED + "[ERROR]" + ANSI_RESET, message, exception);
+    public static void error(final String message) {
+        Gdx.app.error(ANSI_RED + "[ERROR]" + ANSI_RESET, message);
     }
 
     public static void success(final String message) {

@@ -6,15 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.swallow.wolf.Main;
+import com.swallow.wolf.utils.LevelInitializer;
 import com.swallow.wolf.utils.Log;
 
-public class GameScreenFirst implements Screen {
+public class GameScreenFirst implements Screen, LevelInitializer {
 
     private Main game;
     private Texture background;
@@ -29,44 +28,23 @@ public class GameScreenFirst implements Screen {
 
     private Music background_music;
     private Sound step;
-    private Sound man__pain_scream;
+    private Sound man_pain_scream;
     private Sound man_breath;
     private Sound wolf_howl;
     private Sound wolf_bork;
-    private TextField text;
-    private Skin skin;
 
     private OrthographicCamera camera;
+
+    private SpriteBatch batchText;
 
     public GameScreenFirst(final Main game) {
         this.game = game;
         Log.info("Loading game screen...");
 
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-
-        skin = new Skin();
-        skin.add("white", new Texture(pixmap));
-        skin.add("font", game.font);
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.background = skin.newDrawable("white", Color.WHITE);
-        textFieldStyle.cursor = skin.newDrawable("red", Color.RED);
-        skin.add("style", textFieldStyle);
-        this.text = new TextField("FPS: " + Gdx.graphics.getFramesPerSecond(), skin);
-
-        background = new Texture(Gdx.files.internal("forest.png"));
-        man_pic = new Texture(Gdx.files.internal("man.png"));
-        wolf_pic = new Texture(Gdx.files.internal("wolf.png"));
-
-        background_music = Gdx.audio.newMusic(Gdx.files.internal("scary-myst-forest.mp3"));
-        step = Gdx.audio.newSound(Gdx.files.internal("footstep-on-dirt.wav"));
-//        man__pain_scream = Gdx.audio.newSound(Gdx.files.internal("scream-death-pain.wav"));
-        man_breath = Gdx.audio.newSound(Gdx.files.internal("worried-breathing-reverb.wav"));
-        wolf_howl = Gdx.audio.newSound(Gdx.files.internal("wolf-howl.wav"));
-        wolf_bork = Gdx.audio.newSound(Gdx.files.internal("dog-bork.mp3"));
-
-        background_music.setLooping(true);
+        initTextures();
+        initSounds();
+        initMusic();
+        batchText = new SpriteBatch();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
@@ -119,7 +97,7 @@ public class GameScreenFirst implements Screen {
         background.dispose();
         background_music.dispose();
         man_breath.dispose();
-        man__pain_scream.dispose();
+        man_pain_scream.dispose();
         man_pic.dispose();
         wolf_bork.dispose();
         wolf_pic.dispose();
@@ -136,4 +114,37 @@ public class GameScreenFirst implements Screen {
         }
     }
 
+    @Override
+    public void initSounds() throws GdxRuntimeException {
+        try {
+            step = Gdx.audio.newSound(Gdx.files.internal("footstep-on-dirt.wav"));
+//            man_pain_scream = Gdx.audio.newSound(Gdx.files.internal("scream-death-pain.wav"));
+            man_breath = Gdx.audio.newSound(Gdx.files.internal("worried-breathing-reverb.wav"));
+            wolf_howl = Gdx.audio.newSound(Gdx.files.internal("wolf-howl.wav"));
+            wolf_bork = Gdx.audio.newSound(Gdx.files.internal("dog-bork.mp3"));
+        } catch (GdxRuntimeException e) {
+            Log.error("Error loading sound: " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void initMusic() throws GdxRuntimeException {
+        try {
+            background_music = Gdx.audio.newMusic(Gdx.files.internal("scary-myst-forest.mp3"));
+        } catch (GdxRuntimeException e) {
+            Log.error("Error loading music: " + e.getLocalizedMessage());
+        }
+        background_music.setLooping(true);
+    }
+
+    @Override
+    public void initTextures() throws GdxRuntimeException {
+        try {
+            background = new Texture(Gdx.files.internal("forest.png"));
+            man_pic = new Texture(Gdx.files.internal("man.png"));
+            wolf_pic = new Texture(Gdx.files.internal("wolf.png"));
+        } catch (GdxRuntimeException e) {
+            Log.error("Error loading texture: " + e.getLocalizedMessage());
+        }
+    }
 }
